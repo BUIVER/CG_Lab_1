@@ -25,11 +25,41 @@
                                 </accessibility>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n6H-Pa-6QW">
-                                <rect key="frame" x="41" y="1219" width="46" height="79"/>
+                                <rect key="frame" x="48" y="1153" width="46" height="79"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
+                                <state key="normal" title="Scale"/>
                                 <connections>
                                     <action selector="userStartsResize:" destination="BYZ-38-t0r" eventType="touchUpInside" id="fDQ-jp-6lH"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fMw-AX-Xjp">
+                                <rect key="frame" x="396" y="1168" width="58" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Rotation"/>
+                                <connections>
+                                    <action selector="userStartsRotation:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ftf-5P-fXE"/>
+                                </connections>
+                            </button>
+                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Scale for X" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="PXN-pd-nxl">
+                                <rect key="frame" x="146" y="1153" width="97" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Scale for Y" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HMW-8P-9gD">
+                                <rect key="frame" x="146" y="1202" width="97" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xFj-2A-Oc9">
+                                <rect key="frame" x="576" y="1168" width="88" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Gray colored"/>
+                                <connections>
+                                    <action selector="CreateGrayColor:" destination="BYZ-38-t0r" eventType="touchUpInside" id="VxC-K9-5eU"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -38,6 +68,8 @@
                     </view>
                     <connections>
                         <outlet property="CoreImage" destination="JHq-HH-VYQ" id="xdl-pu-UNn"/>
+                        <outlet property="Xcoeficient" destination="PXN-pd-nxl" id="1jl-T3-sJa"/>
+                        <outlet property="Ycoeficient" destination="HMW-8P-9gD" id="jDx-GI-Uw2"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
