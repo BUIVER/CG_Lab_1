@@ -58,6 +58,24 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         // Dismiss the picker.
         dismiss(animated: true, completion: nil)
     }
+    
+    @IBAction func userStartsAddMultiFiltration(_ sender: Any) {
+        if (self.imageView != nil){
+            self.imageView.isHidden = true}
+        
+        
+        let CGcoreTest : CGImage = (CoreImage.image?.cgImage)!
+        let CoreImage1 = colorClass.monoImage(fromPixelValues: colorClass.pixelMedianFiltration(pixelValues: (CoreImage.image?.UInt8Data())!, width: CGcoreTest.width, height: CGcoreTest.height, sortingMatrixSize: 3), width: CGcoreTest.width, height: CGcoreTest.height)
+        var imageView : UIImageView
+        
+        imageView  = UIImageView(frame: CGRect(x: 30, y: 30, width:  CGcoreTest.width , height: CGcoreTest.height))
+        
+        CoreImage.isHidden = true
+        imageView.image = UIImage(cgImage: CoreImage1!)
+        
+        self.view.addSubview(imageView)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let rotationAngle: Double = 45 * (Double.pi/180)
@@ -77,7 +95,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
        
     
         let CGcoreTest : CGImage = (CoreImage.image?.cgImage)!
-        let CoreImage1 = colorClass.monoImage(fromPixelValues: colorClass.pixelMedianFiltration(pixelValues: (CoreImage.image?.UInt8Data())!, width: CGcoreTest.width, height: CGcoreTest.height, sortingMatrixSize: 3), width: CGcoreTest.width, height: CGcoreTest.height)
+        let CoreImage1 = colorClass.monoImage(fromPixelValues:
+            colorClass.pixelLinearFiltration(pixelValues: colorClass.pixelMedianFiltration(pixelValues: (CoreImage.image?.UInt8Data())!, width: CGcoreTest.width, height: CGcoreTest.height, sortingMatrixSize: 3), width: CGcoreTest.width, height: CGcoreTest.height), width: CGcoreTest.width, height: CGcoreTest.height)
         var imageView : UIImageView
         
         imageView  = UIImageView(frame: CGRect(x: 30, y: 30, width:  CGcoreTest.width , height: CGcoreTest.height))
@@ -219,8 +238,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         {
             for x in 0...width-1
             {
-                let X : Int = Int(Double(x) * cos(rotationAngle) + Double(y) * sin(rotationAngle)) + 20
-                let Y : Int = Int(Double(-x) * sin(rotationAngle) + Double(y) * cos(rotationAngle)) + 20
+                let X : Int = Int(Double(x) * cos(rotationAngle) + Double(y) * sin(rotationAngle)) + (newWidth - width)/2
+                let Y : Int = Int(Double(-x) * sin(rotationAngle) + Double(y) * cos(rotationAngle)) + (newHeight - height)/2
                 if (X >= 0 && Y >= 0){
                     for _ in 0...3{
                 rotationMatrix[X][Y].append(pixelValues![index])
@@ -410,6 +429,90 @@ class ColorAffected
         }
         return resultPixelData
     }
+    
+   //Linear Filtration
+    
+    func pixelLinearFiltration (pixelValues: [UInt8], width: Int, height: Int) -> [UInt8]{
+        var imageMatrix : [[[UInt8]]] = []
+        var resultPixelData : [UInt8] = []
+        var color : [UInt8] = []
+        var index = 0
+        var rows : [[UInt8]] = []
+        for _ in 0...height-1
+        {
+            
+            rows = []
+            for _ in 0...width-1
+            {
+                color = []
+                for _ in 0...3{
+                    
+                    color.append(pixelValues[index])
+                    index += 1
+                }
+                rows.append(color)
+            }
+            imageMatrix.append(rows)
+            
+        }
+        
+        for y in 0..<height
+        {
+            
+            for x in 0..<width
+            {
+                let xTempest = x - 1
+                let yTempest = y - 1
+                let xLimit = x + 1
+                let yLimit = y + 1
+                var Rsummary: Double = 0
+                var Gsummary: Double = 0
+                var Bsummary: Double = 0
+                var xIndex = 0
+                var yIndex = 0
+                for indexByY in yTempest..<yLimit
+                {
+                    
+                    for indexByX in xTempest..<xLimit
+                    {
+                        Rsummary = 0
+                        Gsummary = 0
+                        Bsummary = 0
+                        xIndex = indexByX
+                        yIndex = indexByY
+                        if (xIndex >= width-1)
+                        {
+                            xIndex -= (width-1)
+                        }
+                        if (xIndex <= 0)
+                        {
+                            xIndex += width-1
+                        }
+                        if (yIndex >= width-1)
+                        {
+                            yIndex -= (height-1)
+                        }
+                        if (yIndex <= 0)
+                        {
+                            yIndex += height-1
+                        }
+                        Rsummary += Double(imageMatrix[yIndex][xIndex][0])
+                        Gsummary += Double(imageMatrix[yIndex][xIndex][1])
+                        Bsummary += Double(imageMatrix[yIndex][xIndex][2])
+                    }
+                }
+                Rsummary /= 9
+                Gsummary /= 9
+                Bsummary /= 9
+                resultPixelData.append(UInt8(Rsummary))
+                resultPixelData.append(UInt8(Gsummary))
+                resultPixelData.append(UInt8(Bsummary))
+                resultPixelData.append(imageMatrix[y][x][3])
+            }
+        }
+        return resultPixelData
+    }
+    
     
     func monoImage(fromPixelValues pixelValues: [UInt8]?, width: Int, height: Int) -> CGImage?
     {
