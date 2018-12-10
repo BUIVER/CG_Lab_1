@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CG_Lab_1/ViewController.swift"
-            timestampString = "565806510.978201"
+            timestampString = "566133308.598886"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "175"
-            endingLineNumber = "175"
+            startingLineNumber = "176"
+            endingLineNumber = "176"
             landmarkName = "image(fromPixelValues:width:height:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CG_Lab_1/ViewController.swift"
-            timestampString = "565806510.9792399"
+            timestampString = "566133308.599333"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "134"
-            endingLineNumber = "134"
+            startingLineNumber = "135"
+            endingLineNumber = "135"
             landmarkName = "userStartsResize(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -42,12 +42,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CG_Lab_1/ViewController.swift"
-            timestampString = "565806510.979919"
+            timestampString = "566133308.599611"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "310"
-            endingLineNumber = "310"
-            landmarkName = "pixelData()"
+            startingLineNumber = "272"
+            endingLineNumber = "272"
+            landmarkName = "pixelScale(fromPixelValues:width:height:scaleByY:scaleByX:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CG_Lab_1/ViewController.swift"
-            timestampString = "565806510.9807039"
+            timestampString = "566133308.599929"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "230"
-            endingLineNumber = "230"
+            startingLineNumber = "192"
+            endingLineNumber = "192"
             landmarkName = "pixelRotate(fromPixelValues:width:height:newWidth:newHeight:rotationAngle:)"
             landmarkType = "7">
          </BreakpointContent>

@@ -95,7 +95,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         if (self.imageView != nil){
             self.imageView.isHidden = true}
         let CGcoreTest : CGImage = (CoreImage.image?.cgImage)!
-        let CoreImage1 = image(fromPixelValues: colorClass.pixelMonoChromasing(fromPixelValues: CoreImage.image?.pixelData(), width: CGcoreTest.width, height: CGcoreTest.height), width: CGcoreTest.width, height: CGcoreTest.height)
+        let CoreImage1 = colorClass.monoImage(fromPixelValues: colorClass.pixelMonoChromasing(fromPixelValues: CoreImage.image?.UInt8Data(), width: CGcoreTest.width, height: CGcoreTest.height), width: CGcoreTest.width, height: CGcoreTest.height)
         var imageView : UIImageView
         
         imageView  = UIImageView(frame: CGRect(x: 30, y: 30, width: CGcoreTest.width, height: CGcoreTest.height))
@@ -309,6 +309,23 @@ extension UIImage {
         
         return pixelData
     }
+    func UInt8Data() -> [UInt8]? {
+        let size = self.size
+        let dataSize = size.width * size.height * 4
+        var pixelData = [UInt8](repeating: 0, count: Int(dataSize))
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        let context = CGContext(data: &pixelData,
+                                width: Int(size.width),
+                                height: Int(size.height),
+                                bitsPerComponent: 8,
+                                bytesPerRow: 4 * Int(size.width),
+                                space: colorSpace,
+                                bitmapInfo: CGImageAlphaInfo.noneSkipLast.rawValue)
+        guard let cgImage = self.cgImage else { return nil }
+        context?.draw(cgImage, in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+        
+        return pixelData
+    }
 }
 
 class ColorAffected
@@ -436,9 +453,9 @@ class ColorAffected
     }
     
     //Monochromatic
-    func pixelMonoChromasing(fromPixelValues pixelValues: [UInt16]?, width: Int, height: Int) -> [UInt16]? {
+    func pixelMonoChromasing(fromPixelValues pixelValues: [UInt8]?, width: Int, height: Int) -> [UInt8]? {
         
-        var resultPixelData : [UInt16] = []
+        var resultPixelData : [UInt8] = []
         var color = 0
         var index = 0
         
@@ -456,9 +473,9 @@ class ColorAffected
                 }
                 
                 
-                resultPixelData.append(0)
-                resultPixelData.append(UInt16(color/3))
-                resultPixelData.append(0)
+                resultPixelData.append(UInt8(color/3))
+                resultPixelData.append(UInt8(color/3))
+                resultPixelData.append(UInt8(color/3))
                 
                 
                 resultPixelData.append(pixelValues![index])
