@@ -55,11 +55,42 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xFj-2A-Oc9">
-                                <rect key="frame" x="576" y="1168" width="88" height="30"/>
+                                <rect key="frame" x="536" y="1168" width="168" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Gray colored"/>
+                                <state key="normal" title="Mono Chromased Image"/>
                                 <connections>
                                     <action selector="CreateGrayColor:" destination="BYZ-38-t0r" eventType="touchUpInside" id="VxC-K9-5eU"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zF1-aG-FZb">
+                                <rect key="frame" x="27" y="1270" width="89" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Median Filter"/>
+                                <connections>
+                                    <action selector="userStartsMedianFiltration:" destination="BYZ-38-t0r" eventType="touchUpInside" id="UX7-k0-dPU"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="evs-gG-ObD">
+                                <rect key="frame" x="836" y="57" width="135" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Get Image"/>
+                                <connections>
+                                    <action selector="selectImageFromLibrary:" destination="BYZ-38-t0r" eventType="touchUpInside" id="lfY-Aj-A7b"/>
+                                </connections>
+                            </button>
+                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="input matrix size" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="cNY-x1-9Xs">
+                                <rect key="frame" x="146" y="1270" width="97" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Nr-Ig-ffa">
+                                <rect key="frame" x="0.0" y="20" width="35" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="reset"/>
+                                <connections>
+                                    <action selector="resetImage:" destination="BYZ-38-t0r" eventType="touchUpInside" id="OlG-43-9aG"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -68,8 +99,14 @@
                     </view>
                     <connections>
                         <outlet property="CoreImage" destination="JHq-HH-VYQ" id="xdl-pu-UNn"/>
-                        <outlet property="Xcoeficient" destination="PXN-pd-nxl" id="1jl-T3-sJa"/>
+                        <outlet property="MedianButton" destination="zF1-aG-FZb" id="nUT-n2-SIl"/>
+                        <outlet property="MedianMatrixSize" destination="cNY-x1-9Xs" id="LvC-Dz-HNb"/>
+                        <outlet property="MonoChromaticButton" destination="xFj-2A-Oc9" id="X1h-Pw-sLk"/>
+                        <outlet property="RotationButton" destination="fMw-AX-Xjp" id="hur-kH-LWW"/>
+                        <outlet property="ScaleButton" destination="n6H-Pa-6QW" id="MLF-Bu-GgU"/>
+                        <outlet property="Xcoeficient" destination="PXN-pd-nxl" id="bUb-90-OMn"/>
                         <outlet property="Ycoeficient" destination="HMW-8P-9gD" id="jDx-GI-Uw2"/>
+                        <outlet property="resultView" destination="8bC-Xf-vdC" id="JQf-pj-K5h"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
