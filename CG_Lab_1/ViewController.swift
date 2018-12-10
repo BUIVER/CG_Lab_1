@@ -77,7 +77,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
        
     
         let CGcoreTest : CGImage = (CoreImage.image?.cgImage)!
-        let CoreImage1 = image(fromPixelValues: colorClass.pixelMedianFiltration(pixelValues: (CoreImage.image?.pixelData())!, width: CGcoreTest.width, height: CGcoreTest.height, sortingMatrixSize: 3), width: CGcoreTest.width, height: CGcoreTest.height)
+        let CoreImage1 = colorClass.monoImage(fromPixelValues: colorClass.pixelMedianFiltration(pixelValues: (CoreImage.image?.UInt8Data())!, width: CGcoreTest.width, height: CGcoreTest.height, sortingMatrixSize: 3), width: CGcoreTest.width, height: CGcoreTest.height)
         var imageView : UIImageView
         
         imageView  = UIImageView(frame: CGRect(x: 30, y: 30, width:  CGcoreTest.width , height: CGcoreTest.height))
@@ -333,12 +333,12 @@ class ColorAffected
     
     //  Median Filtration
     
-    func pixelMedianFiltration (pixelValues: [UInt16], width: Int, height: Int, sortingMatrixSize: Int) -> [UInt16]{
-        var imageMatrix : [[[UInt16]]] = []
-        var resultPixelData : [UInt16] = []
-        var color : [UInt16] = []
+    func pixelMedianFiltration (pixelValues: [UInt8], width: Int, height: Int, sortingMatrixSize: Int) -> [UInt8]{
+        var imageMatrix : [[[UInt8]]] = []
+        var resultPixelData : [UInt8] = []
+        var color : [UInt8] = []
         var index = 0
-        var rows : [[UInt16]] = []
+        var rows : [[UInt8]] = []
         for _ in 0...height-1
         {
             
@@ -402,9 +402,9 @@ class ColorAffected
                 Rsummary.sort()
                 Gsummary.sort()
                 Bsummary.sort()
-                resultPixelData.append(UInt16(Rsummary[Rsummary.count/2]))
-                resultPixelData.append(UInt16(Gsummary[Gsummary.count/2]))
-                resultPixelData.append(UInt16(Bsummary[Bsummary.count/2]))
+                resultPixelData.append(UInt8(Rsummary[Rsummary.count/2]))
+                resultPixelData.append(UInt8(Gsummary[Gsummary.count/2]))
+                resultPixelData.append(UInt8(Bsummary[Bsummary.count/2]))
                 resultPixelData.append(imageMatrix[y][x][3])
             }
         }
@@ -416,7 +416,7 @@ class ColorAffected
         var imageRef: CGImage?
         if var pixelValues = pixelValues {
             let bitsPerComponent = 8
-            let bytesPerPixel = 2
+            let bytesPerPixel = 4
             let bitsPerPixel = bytesPerPixel * bitsPerComponent
             let bytesPerRow = bytesPerPixel * width
             let totalBytes = height * bytesPerRow
@@ -424,7 +424,7 @@ class ColorAffected
             imageRef = withUnsafePointer(to: &pixelValues, {
                 ptr -> CGImage? in
                 var imageRef: CGImage?
-                let colorSpaceRef = CGColorSpaceCreateDeviceGray()
+                let colorSpaceRef = CGColorSpaceCreateDeviceRGB()
                 let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.noneSkipLast.rawValue).union(CGBitmapInfo())
                 let data = UnsafeRawPointer(ptr.pointee).assumingMemoryBound(to: UInt8.self)
                 let releaseData: CGDataProviderReleaseDataCallback = {
