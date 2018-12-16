@@ -93,10 +93,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         if (self.imageView != nil){
             self.imageView.isHidden = true}
        
-    
+        let matrixSize = Int(MedianMatrixSize.text!)
         let CGcoreTest : CGImage = (CoreImage.image?.cgImage)!
         let CoreImage1 = colorClass.monoImage(fromPixelValues:
-            colorClass.pixelLinearFiltration(pixelValues: colorClass.pixelMedianFiltration(pixelValues: (CoreImage.image?.UInt8Data())!, width: CGcoreTest.width, height: CGcoreTest.height, sortingMatrixSize: 3), width: CGcoreTest.width, height: CGcoreTest.height), width: CGcoreTest.width, height: CGcoreTest.height)
+            colorClass.pixelLinearFiltration(pixelValues: colorClass.pixelMedianFiltration(pixelValues: (CoreImage.image?.UInt8Data())!, width: CGcoreTest.width, height: CGcoreTest.height, sortingMatrixSize: matrixSize ?? 3), width: CGcoreTest.width, height: CGcoreTest.height), width: CGcoreTest.width, height: CGcoreTest.height)
         var imageView : UIImageView
         
         imageView  = UIImageView(frame: CGRect(x: 30, y: 30, width:  CGcoreTest.width , height: CGcoreTest.height))
@@ -358,6 +358,7 @@ class ColorAffected
         var color : [UInt8] = []
         var index = 0
         var rows : [[UInt8]] = []
+        var pixelLab: [UInt8] = convertXYZtoLAB(xyzArray: convertRGBtoXYZ(rgbArray: pixelValues))
         for _ in 0...height-1
         {
             
@@ -367,7 +368,7 @@ class ColorAffected
                 color = []
                 for _ in 0...3{
                     
-                    color.append(pixelValues[index])
+                    color.append(pixelLab[index])
                     index += 1
                 }
                 rows.append(color)
@@ -437,6 +438,7 @@ class ColorAffected
         var resultPixelData : [UInt8] = []
         var color : [UInt8] = []
         var index = 0
+        var pixelLab: [UInt8] = convertXYZtoLAB(xyzArray: convertRGBtoXYZ(rgbArray: pixelValues))
         var rows : [[UInt8]] = []
         for _ in 0...height-1
         {
@@ -447,7 +449,7 @@ class ColorAffected
                 color = []
                 for _ in 0...3{
                     
-                    color.append(pixelValues[index])
+                    color.append(pixelLab[index])
                     index += 1
                 }
                 rows.append(color)
@@ -559,6 +561,7 @@ class ColorAffected
     func pixelMonoChromasing(fromPixelValues pixelValues: [UInt8]?, width: Int, height: Int) -> [UInt8]? {
         
         var resultPixelData : [UInt8] = []
+        var pixelLab: [UInt8] = convertXYZtoLAB(xyzArray: convertRGBtoXYZ(rgbArray: pixelValues!))
         var color = 0
         var index = 0
         
@@ -571,7 +574,7 @@ class ColorAffected
                 color = 0
                 for _ in 0...2
                 {
-                    color +=  Int(pixelValues![index])
+                    color +=  Int(pixelLab[index])
                     index += 1
                 }
                 
@@ -581,7 +584,7 @@ class ColorAffected
                 resultPixelData.append(UInt8(color/3))
                 
                 
-                resultPixelData.append(pixelValues![index])
+                resultPixelData.append(pixelLab[index])
                 index += 1
                 
             }
@@ -598,9 +601,9 @@ class ColorAffected
             let r: Double = Double(rgbArray[index])
             let g: Double = Double(rgbArray[index+1])
             let b: Double = Double(rgbArray[index+2])
-            let x: Double = r * 0.644458
-            let y: Double = g * 1.191933
-            let z: Double = b * 1.202819
+            let x: Double = r * 0.6649224
+            let y: Double = g * 1.1338698
+            let z: Double = b * 1.2012078
             resultArray.append(x)
             resultArray.append(y)
             resultArray.append(z)
