@@ -625,9 +625,9 @@ class ColorAffected
         for _ in stride(from: index, to: xyzArray.count, by: 4)
         {
            
-            let x = xyzT[index]/95.047
-            let y = xyzT[index+1]/100.000
-            let z = xyzT[index+2]/108.883
+            let x = xyzT[index]/169.555212
+            let y = xyzT[index+1]/289.136799
+            let z = xyzT[index+2]/306.307989
             let X = deltaF(f:x)
             let Y = deltaF(f:y)
             let Z = deltaF(f:z)
