@@ -238,8 +238,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         {
             for x in 0...width-1
             {
-                let X : Int = Int(Double(x) * cos(rotationAngle) + Double(y) * sin(rotationAngle)) + (newWidth - width)/2
-                let Y : Int = Int(Double(-x) * sin(rotationAngle) + Double(y) * cos(rotationAngle)) + (newHeight - height)/2
+                var X : Int = Int(Double(x) * cos(rotationAngle) + Double(y) * sin(rotationAngle))
+                var Y : Int = Int(Double(-x) * sin(rotationAngle) + Double(y) * cos(rotationAngle)) 
+                X += (newWidth - width)/2
+                Y += (newHeight - height)/2
                 if (X >= 0 && Y >= 0){
                     for _ in 0...3{
                 rotationMatrix[X][Y].append(pixelValues![index])
@@ -561,7 +563,8 @@ class ColorAffected
     func pixelMonoChromasing(fromPixelValues pixelValues: [UInt8]?, width: Int, height: Int) -> [UInt8]? {
         
         var resultPixelData : [UInt8] = []
-        var pixelLab: [UInt8] = convertXYZtoLAB(xyzArray: convertRGBtoXYZ(rgbArray: pixelValues!))
+        var pixelLab: [Int] = convertXYZtoLAB(xyzArray: convertRGBtoXYZ(rgbArray: pixelValues!))
+        var intarray: [Double] = []
         var color = 0
         var index = 0
         
@@ -571,39 +574,83 @@ class ColorAffected
             
             for _ in 0...width-1
             {
-                color = 0
-                for _ in 0...2
-                {
-                    color +=  Int(pixelLab[index])
-                    index += 1
-                }
-                
-                
-                resultPixelData.append(UInt8(color/3))
-                resultPixelData.append(UInt8(color/3))
-                resultPixelData.append(UInt8(color/3))
-                
-                
-                resultPixelData.append(pixelLab[index])
+                intarray.append(pixelLab[index])
                 index += 1
+                intarray.append(0)
+                index += 1
+                intarray.append(0)
+                index += 1
+                intarray.append(pixelLab[index])
                 
             }
             
+            resultPixelData.append(UInt8(color/3))
+            resultPixelData.append(UInt8(color/3))
+            resultPixelData.append(UInt8(color/3))
+            
+            
+            resultPixelData.append(pixelLab[index])
+            index += 1
+            
         }
         return resultPixelData
+    }
+    func convertXYZtoLAB(xyzArray: [Double]) -> [Int]
+    {
+        
+        
+        // Get XYZ
+        var index = 0
+        let xyzT = xyzArray
+        var resultArray: [UInt8] = []
+        for _ in stride(from: index, to: xyzArray.count, by: 4)
+        {
+            
+            let x = xyzT[index]/(255 / 0.95)
+            let y = xyzT[index+1]/255
+            let z = xyzT[index+2]/(255 / 1.089)
+            let X = deltaF(f:x)
+            let Y = deltaF(f:y)
+            debugPrint(y)
+            debugPrint(Y)
+            let Z = deltaF(f:z)
+            let L = 116 * Y - 16
+            let a = 500 * (X - Y)
+            let b = 200 * (Y - Z)
+            
+            resultArray.append(UInt8(L))
+            resultArray.append(UInt8(a))
+            resultArray.append(UInt8(b))
+            resultArray.append(UInt8(xyzArray[index+3]))
+            index += 4
+        }
+        
+        // Transfrom XYZ to L*a*b
+        
+        
+        
+        return resultArray
+        
+    }
+    func deltaF(f: Double) -> (Double){
+        let transformation = (f > pow((6.0/29.0), 3.0)) ? pow(f, 1.0/3.0) : (1/3) * pow((29.0/6.0), 2.0) * f + 4/29.0
+        
+        return (transformation)
     }
     func convertRGBtoXYZ(rgbArray: [UInt8]) -> [Double]
     {
         var index = 0
         var resultArray: [Double] = []
+        
         for _ in stride(from: index, to: rgbArray.count, by: 4)
         {
+            
             let r: Double = Double(rgbArray[index])
             let g: Double = Double(rgbArray[index+1])
             let b: Double = Double(rgbArray[index+2])
-            let x: Double = r * 0.6649224
-            let y: Double = g * 1.1338698
-            let z: Double = b * 1.2012078
+            let x: Double = r * 0.964
+            let y: Double = g * 1
+            let z: Double = b * 0.825
             resultArray.append(x)
             resultArray.append(y)
             resultArray.append(z)
@@ -613,46 +660,54 @@ class ColorAffected
             
         }
         return resultArray
+      
     }
-    func convertXYZtoLAB(xyzArray: [Double]) -> [UInt8]
-    {
+    
+    func convertLABtoRGB(labArray: [Double]) -> [UInt8] {
        
-        
-            // Get XYZ
-        var index = 0
-            let xyzT = xyzArray
         var resultArray: [UInt8] = []
-        for _ in stride(from: index, to: xyzArray.count, by: 4)
-        {
+        for index in stride(from: 0, to: labArray.count-1, by: 4){
+        var Y = (labArray[index] + 16) / 116
+        var X = labArray[index+1] / 500 + Y
+        var Z = Y - labArray[index+2] / 200
            
-            let x = xyzT[index]/169.555212
-            let y = xyzT[index+1]/289.136799
-            let z = xyzT[index+2]/306.307989
-            let X = deltaF(f:x)
-            let Y = deltaF(f:y)
-            let Z = deltaF(f:z)
-            let L = 116*Y - 16
-            let a = 500 * (X - Y)
-            let b = 200 * (Y - Z)
-          
-            resultArray.append(UInt8(L))
-            resultArray.append(UInt8(a))
-            resultArray.append(UInt8(b))
-            resultArray.append(UInt8(xyzArray[index+3]))
-            index += 4
+            if (pow(Y, 3) > 0.008856) {Y = pow(Y, 3)}
+             else {Y = (Y - 16 / 116) / (7.787)}
+            if (pow(X, 3) > 0.008856)
+            {X = pow(X, 3)}
+            else {X = (X - 16 / 116) / (7.787)}
+            if (pow(Z, 3) > 0.008856) {Z = pow(Z, 3)}
+            else {Z = (Z - 16 / 116) / (7.787)}
+            var x = X * 95.047;
+            var y = Y * 100;
+            var z = Z * 108.883;
+            X = x / 100;
+            Y = y / 100;
+            Z = z / 100;
+            var R = X * 3.2406 + Y * (-1.5372) + Z * (-0.4986);
+            var G = X * (-0.9689) + Y * 1.8758 + Z * 0.0415;
+            var B = X * 0.0557 + Y * -0.2040 + Z * 1.0570;
+            
+            if (R > 0.0031308) {R = 1.055 * (pow(R, (1 / 2.4))) - 0.055}
+            else {R = 12.92 * R}
+            if (G > 0.0031308) {G = 1.055 * (pow(G, (1 / 2.4))) - 0.055}
+            else {G = 12.92 * G}
+            if (B > 0.0031308) {B = 1.055 * (pow(B, (1 / 2.4))) - 0.055}
+            else {B = 12.92 * B}
+            resultArray.append(UInt8(R * 255))
+            resultArray.append(UInt8(G * 255))
+            resultArray.append(UInt8(B * 255))
+            resultArray.append(UInt8(labArray[index+3]))
         }
-            
-            // Transfrom XYZ to L*a*b
+      
         
+     
+      
         
-            
-            return resultArray
+       
+        return resultArray
         
     }
-    func deltaF(f: Double) -> (Double){
-        let transformation = (f > pow((6.0/29.0), 3.0)) ? pow(f, 1.0/3.0) : (1/3) * pow((29.0/6.0), 2.0) * f + 4/29.0
-        
-        return (transformation)
     }
-}
+
 
